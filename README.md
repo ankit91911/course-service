@@ -1,61 +1,191 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Course Service
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+This service provides API endpoints for managing courses.
 
-## About Laravel
+## Technology Stack
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+-   **Backend Framework:** Laravel
+-   **Database:** MySQL
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Database Configuration
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+-   **Database Name:** `course_service_db`
+-   Ensure that your MySQL server is running and you have configured the database connection details in your Laravel `.env` file.
 
-## Learning Laravel
+## API Endpoints
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### 1. Create Course
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+-   **Endpoint:** `POST /api/courses`
+-   **Description:** Creates a new course.
+-   **Request Body (JSON):**
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+    ```json
+    {
+        "name": "Course Name",
+        "description": "Course Description",
+        "teacher_id": 123
+    }
+    ```
 
-## Laravel Sponsors
+    -   `name`: (string, required) The name of the course.
+    -   `description`: (string, optional) A brief description of the course.
+    -   `teacher_id`: (integer, required) The ID of the teacher associated with the course.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+-   **Response (JSON - Success):**
 
-### Premium Partners
+    ```json
+    {
+        "id": 4,
+        "name": "Course Name",
+        "description": "Course Description",
+        "teacher_id": 123,
+        "created_at": "2025-05-17T18:10:00.000000Z",
+        "updated_at": "2025-05-17T18:10:00.000000Z"
+    }
+    ```
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+-   **Response (JSON - Error - Validation Failed):**
+    ```json
+    {
+        "message": "The name field is required.",
+        "errors": {
+            "name": ["The name field is required."],
+            "teacher_id": ["The teacher id field is required."]
+        }
+    }
+    ```
 
-## Contributing
+### 2. List Courses
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+-   **Endpoint:** `GET /api/courses`
+-   **Description:** Retrieves a list of all courses.
+-   **Request Parameters:** None
+-   **Response (JSON - Success):**
+    ```json
+    [
+        {
+            "id": 1,
+            "name": "Introduction to Programming",
+            "description": "A beginner-friendly programming course.",
+            "teacher_id": 1,
+            "created_at": "2025-05-17T18:05:00.000000Z",
+            "updated_at": "2025-05-17T18:05:00.000000Z"
+        },
+        {
+            "id": 2,
+            "name": "Data Structures and Algorithms",
+            "description": "Learn about fundamental data structures and algorithms.",
+            "teacher_id": 2,
+            "created_at": "2025-05-17T18:06:00.000000Z",
+            "updated_at": "2025-05-17T18:06:00.000000Z"
+        }
+        // ... more courses
+    ]
+    ```
 
-## Code of Conduct
+### 3. Get Course by ID
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+-   **Endpoint:** `GET /api/courses/{id}`
+-   **Description:** Retrieves a specific course by its ID.
+-   **Path Parameter:**
+    -   `{id}`: (integer, required) The ID of the course to retrieve.
+-   **Response (JSON - Success):**
 
-## Security Vulnerabilities
+    ```json
+    {
+        "id": 1,
+        "name": "Introduction to Programming",
+        "description": "A beginner-friendly programming course.",
+        "teacher_id": 1,
+        "created_at": "2025-05-17T18:05:00.000000Z",
+        "updated_at": "2025-05-17T18:05:00.000000Z"
+    }
+    ```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+-   **Response (JSON - Error - Course Not Found):**
+    ```json
+    {
+        "message": "Course not found."
+    }
+    ```
 
-## License
+## Setup Instructions
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+1.  **Clone the repository:**
+
+    ```bash
+    git clone <repository-url>
+    cd <repository-name>
+    ```
+
+2.  **Install Composer dependencies:**
+
+    ```bash
+    composer install
+    ```
+
+3.  **Copy the `.env.example` file to `.env` and configure your database connection details:**
+    `bash
+ cp .env.example .env
+ `
+    Edit the `.env` file with your MySQL database credentials:
+    `DB_CONNECTION=mysql
+ DB_HOST=127.0.0.1
+ DB_PORT=3306
+ DB_DATABASE=course_service_db
+ DB_USERNAME=root
+ DB_PASSWORD=hrhk
+`
+
+4.  **Generate the application key:**
+
+    ```bash
+    php artisan key:generate
+    ```
+
+5.  **Run database migrations:**
+
+    ```bash
+    php artisan migrate
+    ```
+
+6.  **Start the Laravel development server:**
+    ```bash
+    php artisan serve
+    ```
+    The API will be accessible at `http://127.0.0.1:8002/api`.
+
+## Usage
+
+You can use tools like Postman, Insomnia, or `curl` to interact with the API endpoints.
+
+**Example using `curl`:**
+
+-   **Create a new course:**
+
+    ```bash
+    curl -X POST -H "Content-Type: application/json" -d '{"name": "Web Development Fundamentals", "description": "Learn the basics of web development.", "teacher_id": 3}' [http://127.0.0.1:8002/api/courses](http://127.0.0.1:8002/api/courses)
+    ```
+
+-   **List all courses:**
+
+    ```bash
+    curl [http://127.0.0.1:8002/api/courses](http://127.0.0.1:8002/api/courses)
+    ```
+
+-   **Get a specific course by ID (e.g., ID 1):**
+    ```bash
+    curl [http://127.0.0.1:8002/api/courses/1](http://127.0.0.1:8002/api/courses/1)
+    ```
+
+## Further Development
+
+This is a basic implementation of the Course Service. Potential future enhancements could include:
+
+-   **Updating and deleting courses:** Implementing `PUT` and `DELETE` endpoints.
+-   **Pagination for listing courses:** Handling a large number of courses efficiently.
+-   **Filtering and searching courses:** Allowing users to query courses based on criteria.
+-   **Authentication and Authorization:** Securing the API endpoints.
+-   **Relationships with other entities:** Integrating with teacher or student services.
+-   **Unit and integration tests:** Ensuring the reliability of the service.
